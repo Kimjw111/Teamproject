@@ -2,45 +2,80 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Chat Program</title>
+    <title>1조 채팅방(김정우,구병오,김성준)</title>
   </head>
+  <style>
+    #header {
+      width: 100%;
+      border-radius: 20px;
+      margin: 10px auto;
+      background: black;
+      overflow: hidden;
+    }
+    #title {
+      color: orangered;
+      animation: movetitle 10s infinite linear;
+    }
+    @keyframes movetitle {
+      from {
+        transform: translateX(1500px);
+      }
+      to {
+        transform: translateX(-800px);
+      }
+    }
+    #chat {
+      height: 100%;
+      width: 100%;
+    }
+    #message-form {
+      position: absolute;
+      bottom: 0;
+    }
+  </style>
   <body>
-    <h1>Chat Program</h1>
-    <div id="chat">
-      <ul id="messages"></ul>
-      <form id="message-form">
-        <input id="input" autocomplete="off" />
-        <button>Send</button>
-      </form>
+    <div id="container">
+      <div id="header">
+        <h1 id="title">1조 채팅방</h1>
+      </div>
+      <div id="chat">
+        <ul id="messages"></ul>
+        <form id="message-form">
+          <div id="foot">
+            <input id="input" autocomplete="off" />
+            <button id="send_btn">Send</button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const socket = io()
+      const socket = io();
 
       // 로그인
-      const username = prompt('대화명을 입력하세요 (익명 또는 원하는 이름)')
-      socket.emit('login', username)
+      const username = prompt("대화명을 입력하세요 (익명 또는 원하는 이름)");
+      socket.emit("login", username);
 
       // 채팅 메시지 전송
       document
-        .getElementById('message-form')
-        .addEventListener('submit', (e) => {
-          e.preventDefault()
-          const input = document.getElementById('input')
-          const message = input.value
-          input.value = ''
-          socket.emit('chat message', { message: message })
-        })
+        .getElementById("message-form")
+        .addEventListener("submit", (e) => {
+          e.preventDefault();
+          const input = document.getElementById("input");
+          const message = input.value;
+          input.value = "";
+          socket.emit("chat message", { message: message });
+        });
 
       // 채팅 메시지 받기
-      socket.on('chat message', (msg) => {
-        const messages = document.getElementById('messages')
-        const item = document.createElement('li')
-        item.textContent = `[${msg.from}] ${msg.message}`
-        messages.appendChild(item)
-        window.scrollTo(0, document.body.scrollHeight)
-      })
+      socket.on("chat message", (msg) => {
+        const messages = document.getElementById("messages");
+        const item = document.createElement("li");
+        item.textContent = `[${msg.from}] ${msg.message}`;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
     </script>
   </body>
 </html>
