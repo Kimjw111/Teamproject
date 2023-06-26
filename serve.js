@@ -6,7 +6,7 @@ const io = require("socket.io")(http);
 
 // 정적 파일 제공
 app.use(express.static(__dirname + "/"));
-app.get("/chat", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
