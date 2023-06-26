@@ -1,0 +1,46 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat Program</title>
+  </head>
+  <body>
+    <h1>Chat Program</h1>
+    <div id="chat">
+      <ul id="messages"></ul>
+      <form id="message-form">
+        <input id="input" autocomplete="off" />
+        <button>Send</button>
+      </form>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io()
+
+      // 로그인
+      const username = prompt('대화명을 입력하세요 (익명 또는 원하는 이름)')
+      socket.emit('login', username)
+
+      // 채팅 메시지 전송
+      document
+        .getElementById('message-form')
+        .addEventListener('submit', (e) => {
+          e.preventDefault()
+          const input = document.getElementById('input')
+          const message = input.value
+          input.value = ''
+          socket.emit('chat message', { message: message })
+        })
+
+      // 채팅 메시지 받기
+      socket.on('chat message', (msg) => {
+        const messages = document.getElementById('messages')
+        const item = document.createElement('li')
+        item.textContent = `[${msg.from}] ${msg.message}`
+        messages.appendChild(item)
+        window.scrollTo(0, document.body.scrollHeight)
+      })
+    </script>
+  </body>
+</html>
