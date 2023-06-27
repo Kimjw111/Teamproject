@@ -16,9 +16,22 @@ const users = {};
 // 대화 기록 저장을 위한 배열
 const conversationHistory = [];
 
+// 서버 이용자수를 세기 위한 카운터
+let userCount = 0;
+
 // 채팅방 연결
 io.on("connection", (socket) => {
   console.log("A user connected");
+
+  // 새로운 사용자가 참가할 때마다 사용자 수 업데이트
+  userCount++;
+  io.emit("user count", userCount);
+
+  socket.on("disconnect", () => {
+    // 사용자가 나갈 때마다 사용자 수 업데이트
+    userCount--;
+    io.emit("user count", userCount);
+  });
 
   // 로그인 이벤트 처리
   socket.on("login", (username) => {
@@ -102,6 +115,12 @@ io.on("connection", (socket) => {
   // 스크롤 자동 아래로 이동 요청 처리
   socket.on("scroll", () => {
     io.to(socket.id).emit("scroll to bottom");
+  });
+
+  // 서버로부터 사용자 수 업데이트 이벤트를 받아 처리
+  socket.on("user count", (count) => {
+    const userCountElement = document.getElementById("user-count");
+    userCountElement.textContent = count;
   });
 
   // 연결 해제 이벤트 처리

@@ -32,10 +32,9 @@
           <div id="head">
             <h1 id="title">Whale-chat</h1>
           </div>
-          <!-- 인원수자리 -->
-          <!-- <div id="person">
-            <span></span>
-          </div> -->
+          <div id="person">
+            <span id="user-count"></span>
+          </div>
         </div>
         <div id="chat">
           <ul id="messages"></ul>
@@ -104,9 +103,16 @@
           socket.emit("scroll");
           // window.scrollTo(0, document.body.scrollHeight);
         });
+        // 스크롤 자동 아래부분
         socket.on("scroll to bottom", () => {
           const chat = document.getElementById("chat");
           chat.scrollTop = chat.scrollHeight;
+        });
+
+        // 서버로부터 사용자 수 업데이트 이벤트를 받아 처리
+        socket.on("user count", (count) => {
+          const userCountElement = document.getElementById("user-count");
+          userCountElement.textContent = count + "명";
         });
       }, 3000);
     </script>

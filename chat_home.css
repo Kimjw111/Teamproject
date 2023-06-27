@@ -43,6 +43,16 @@ body,
         transform: translateX(-600px);
       }
     }
+    #person{
+      height: 100px;
+      width: 100px;
+      margin-top: 40px;
+    }
+    #person > span{
+      font-size: 25px;
+      text-align: center;
+    }
+
     #chat {
       height: 85%;
       width: 100%;
