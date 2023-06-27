@@ -1,5 +1,5 @@
 /* 폰트 및 전체 윤곽 */
-@import url('https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lobster&family=Satisfy&family=Ubuntu:wght@400;500;700&display=swap');
 body,html {
     width: 100%;
     height: 100%;
@@ -29,14 +29,14 @@ body,html {
 #up{
     margin-top: -2%;
     font-size: 50px;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: 'Satisfy', cursive;
     font-weight: 500;
 }
 
 /* 로딩부분 */
 #sub{
     margin-top: 1%;
-    font-size: 30px;
+    font-size: 20px;
     font-family: 'Ubuntu', sans-serif;
     font-weight: 400;
 }
@@ -49,15 +49,15 @@ body,html {
 #loading_cl > div {
     width: 20px;
     height: 20px;
-    border: 2px solid gray;
+    border: 2px solid none;
     border-radius: 20px;
-    margin-right: 2%;
+    margin-right: 3%;
     background-color: black;
     transform: scale(0);
     animation: clDotAnimation 2s infinite;
 }
 #loading_cl #cl01 {
-    margin-left: 1.5%;
+    margin-left: 2.5%;
     animation-delay: 0s;
 }
 #loading_cl #cl02 {

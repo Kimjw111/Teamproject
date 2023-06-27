@@ -81,7 +81,8 @@
           const messages = document.getElementById("messages");
           const nickname = document.createElement("li");
           const item = document.createElement("li");
-          nickname.textContent = `[${msg.from}]`;
+          nickname.style.fontSize = "0.8rem";
+          nickname.textContent = `★${msg.from}★`;
           item.textContent = ` ${msg.message}`;
           messages.append(nickname, item);
           window.scrollTo(0, document.body.scrollHeight);
