@@ -85,7 +85,13 @@
           nickname.textContent = `★${msg.from}★`;
           item.textContent = ` ${msg.message}`;
           messages.append(nickname, item);
-          window.scrollTo(0, document.body.scrollHeight);
+          // 스크롤 자동 아래로 이동 요청
+          socket.emit("scroll");
+          // window.scrollTo(0, document.body.scrollHeight);
+        });
+        socket.on("scroll to bottom", () => {
+          const chat = document.getElementById("chat");
+          chat.scrollTop = chat.scrollHeight;
         });
       }, 3000);
     </script>

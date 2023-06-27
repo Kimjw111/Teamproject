@@ -42,6 +42,7 @@ io.on("connection", (socket) => {
     let message = msg.message;
     // 전체 채팅 메시지 전송
     io.emit("chat message", { message: message, from: sender });
+    io.emit("scroll to bottom");
     // 귓속말 처리
     if (msg.to) {
       const receiverId = Object.keys(users).find(
@@ -91,6 +92,16 @@ io.on("connection", (socket) => {
         }
       }
     }
+  });
+
+  // 스크롤 자동 아래로 이동 이벤트 처리
+  socket.on("scroll to bottom", () => {
+    io.to(socket.id).emit("scroll");
+  });
+
+  // 스크롤 자동 아래로 이동 요청 처리
+  socket.on("scroll", () => {
+    io.to(socket.id).emit("scroll to bottom");
   });
 
   // 연결 해제 이벤트 처리
