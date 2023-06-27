@@ -8,15 +8,17 @@ body,
     body::-webkit-scrollbar {
       display: none;
     }
-    /* #container {
+    #Nt{display: none;
+      width: 100%;
+    height: 100%;
+    }
+    #container {
       width: 100%;
       height: 100%;
-      margin: 0;
-    } */
+    }
     #header {
       width: 100%;
       margin: 0;
-      background: #eaf8fb;
       display: flex;
       position: fixed;
     }
@@ -39,9 +41,11 @@ body,
       }
     }
     #chat {
-      height: 100%;
+      height: 85%;
       width: 100%;
       overflow-y: scroll;
+      position: relative;
+      top: 10%;
     }
     #messages {
       list-style: none;

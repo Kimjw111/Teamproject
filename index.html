@@ -25,7 +25,7 @@
     <!-- // 로딩화면 -->
 
     <!-- 쳇홈화면 -->
-    <div id="Nt" style="display: none">
+    <div id="Nt">
       <div id="container">
         <div id="header">
           <img src="/Whale.jpg" alt="whale" width="100px" height="100px" />
@@ -51,38 +51,42 @@
     <!-- 스크립트 -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
+      const data = new Date();
       setTimeout(() => {
         const nt = document.getElementById("Nt");
         const all = document.getElementById("real_all");
         nt.style.display = "block";
         all.style.display = "none";
-      }, 3 * 1000);
+      }, 2.9 * 1000);
+      setTimeout(() => {
+        const socket = io();
 
-      const socket = io();
+        // 로그인
+        const username = prompt("대화명을 입력하세요 (익명 또는 원하는 이름)");
+        socket.emit("login", username);
 
-      // 로그인
-      const username = prompt("대화명을 입력하세요 (익명 또는 원하는 이름)");
-      socket.emit("login", username);
+        // 채팅 메시지 전송
+        document
+          .getElementById("message-form")
+          .addEventListener("submit", (e) => {
+            e.preventDefault();
+            const input = document.getElementById("input");
+            const message = input.value;
+            input.value = "";
+            socket.emit("chat message", { message: message });
+          });
 
-      // 채팅 메시지 전송
-      document
-        .getElementById("message-form")
-        .addEventListener("submit", (e) => {
-          e.preventDefault();
-          const input = document.getElementById("input");
-          const message = input.value;
-          input.value = "";
-          socket.emit("chat message", { message: message });
+        // 채팅 메시지 받기
+        socket.on("chat message", (msg) => {
+          const messages = document.getElementById("messages");
+          const nickname = document.createElement("li");
+          const item = document.createElement("li");
+          nickname.textContent = `[${msg.from}]`;
+          item.textContent = ` ${msg.message}`;
+          messages.append(nickname, item);
+          window.scrollTo(0, document.body.scrollHeight);
         });
-
-      // 채팅 메시지 받기
-      socket.on("chat message", (msg) => {
-        const messages = document.getElementById("messages");
-        const item = document.createElement("li");
-        item.textContent = `[${msg.from}] ${msg.message}`;
-        messages.appendChild(item);
-        window.scrollTo(0, document.body.scrollHeight);
-      });
+      }, 3000);
     </script>
   </body>
 </html>
