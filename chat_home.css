@@ -76,9 +76,10 @@ body,
     #input {
       border: none;
       border-radius: 2rem;
+      padding-left: 20PX;
       width: 85%;
       height: 80%;
-      font-size: 1.5em;
+      font-size: 1em;
       margin: auto 0;
     }
     #send_btn {
