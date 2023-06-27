@@ -51,7 +51,15 @@
     <!-- 스크립트 -->
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      const data = new Date();
+      /* 시간설정 */
+      function timeset() {
+        const today = new Date();
+        today.setHours(today.getHours());
+        const hours = today.getHours().toString().padStart(2, "0");
+        const minutes = today.getMinutes().toString().padStart(2, "0");
+        return `${hours}:${minutes}`;
+      }
+
       setTimeout(() => {
         const nt = document.getElementById("Nt");
         const all = document.getElementById("real_all");
@@ -81,10 +89,17 @@
           const messages = document.getElementById("messages");
           const nickname = document.createElement("li");
           const item = document.createElement("li");
+          const time = document.createElement("span");
+          time.textContent = timeset();
+          time.style.fontSize = "0.5rem";
+          time.style.float = "right";
+          time.style.marginLeft = "20px";
+          time.style.marginTop = "10px";
           nickname.style.fontSize = "0.8rem";
           nickname.textContent = `★${msg.from}★`;
           item.textContent = ` ${msg.message}`;
           messages.append(nickname, item);
+          item.appendChild(time);
           // 스크롤 자동 아래로 이동 요청
           socket.emit("scroll");
           // window.scrollTo(0, document.body.scrollHeight);
