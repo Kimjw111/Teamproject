@@ -33,6 +33,7 @@
             <h1 id="title">Whale-chat</h1>
           </div>
           <div id="person">
+            <img src="./사람io.png" alt="사람아이콘" width="30px" />
             <span id="user-count"></span>
           </div>
         </div>
@@ -95,7 +96,7 @@
           time.style.marginLeft = "20px";
           time.style.marginTop = "10px";
           nickname.style.fontSize = "0.8rem";
-          nickname.textContent = `★${msg.from}★`;
+          nickname.textContent = `★ ${msg.from} ★`;
           item.textContent = ` ${msg.message}`;
           messages.append(nickname, item);
           item.appendChild(time);
@@ -112,7 +113,7 @@
         // 서버로부터 사용자 수 업데이트 이벤트를 받아 처리
         socket.on("user count", (count) => {
           const userCountElement = document.getElementById("user-count");
-          userCountElement.textContent = count + "명";
+          userCountElement.textContent = count;
         });
       }, 3000);
     </script>
