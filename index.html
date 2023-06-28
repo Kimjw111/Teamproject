@@ -33,7 +33,6 @@
             <h1 id="title">Whale-chat</h1>
           </div>
           <div id="person">
-            <img src="./사람io.png" alt="사람아이콘" width="30px" />
             <span id="user-count"></span>
           </div>
         </div>
@@ -86,20 +85,33 @@
 
         // 채팅 메시지 받기
         socket.on("chat message", (msg) => {
-          const messages = document.getElementById("messages");
-          const nickname = document.createElement("li");
-          const item = document.createElement("li");
-          const time = document.createElement("span");
-          time.textContent = timeset();
-          time.style.fontSize = "0.5rem";
-          time.style.float = "right";
-          time.style.marginLeft = "20px";
-          time.style.marginTop = "10px";
-          nickname.style.fontSize = "0.8rem";
-          nickname.textContent = `★ ${msg.from} ★`;
-          item.textContent = ` ${msg.message}`;
-          messages.append(nickname, item);
-          item.appendChild(time);
+          const chat = document.getElementById("chat");
+          if (msg.from === "서버") {
+            // msg.from이 서버일 경우
+            const server = document.createElement("div");
+            const servermsg = document.createElement("span");
+            servermsg.textContent = `${msg.message}`;
+            server.className = "server_msg";
+            chat.appendChild(server).appendChild(servermsg);
+          } else {
+            const messages = document.createElement("ul");
+            const nickname = document.createElement("li");
+            const item = document.createElement("li");
+            const time = document.createElement("span");
+            const br = document.createElement("br");
+            messages.className = "messages";
+            time.textContent = timeset();
+            time.style.fontSize = "0.5rem";
+            time.style.float = "right";
+            time.style.marginLeft = "20px";
+            time.style.marginTop = "10px";
+            nickname.style.fontSize = "0.8rem";
+            nickname.textContent = `★ ${msg.from} ★`;
+            item.textContent = ` ${msg.message}`;
+            chat.append(messages, br);
+            messages.append(nickname, item);
+            item.appendChild(time);
+          }
           // 스크롤 자동 아래로 이동 요청
           socket.emit("scroll");
           // window.scrollTo(0, document.body.scrollHeight);
@@ -113,7 +125,7 @@
         // 서버로부터 사용자 수 업데이트 이벤트를 받아 처리
         socket.on("user count", (count) => {
           const userCountElement = document.getElementById("user-count");
-          userCountElement.textContent = count;
+          userCountElement.textContent = count + "명";
         });
       }, 3000);
     </script>

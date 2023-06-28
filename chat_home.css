@@ -34,19 +34,16 @@ body,
       color: #000;
       font-family: 'Satisfy', cursive;
       font-size: 40px;
-      margin: 10px 10px 25px;
+      margin: 0 10px 25px;
     }
     #person{
       height: 100px;
       width: 100px;
-      margin-top: 30px;
+      margin-top: 40px;
       text-align: center;
     }
-    #person img {
-      cursor: pointer;
-    }
     #person > span{
-      font-size: 30px;
+      font-size: 25px;
     }
 
     #chat {
@@ -58,9 +55,10 @@ body,
       position: relative;
       top: 10%;
     }
-    #messages {
+    .messages {
       list-style: none;
       display: inline-block;
+      margin-bottom:-10px;
     }
     li:nth-child(even) {
       padding: 10px;
@@ -104,4 +102,12 @@ body,
     #send_btn:hover {
       background: #97b6b1;
       transform: scale(1.01);
+    }
+    .server_msg{
+      text-align: center;
+      font-size:1.3rem;
+      background: rgb(171, 202, 207, 0.4);
+      color:#ec8f8f;
+      padding: 5px 0;
+      margin-top: 15px;
     }
