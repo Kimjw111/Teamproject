@@ -53,56 +53,71 @@ io.on("connection", (socket) => {
   socket.on("chat message", (msg) => {
     const sender = users[socket.id].username;
     let message = msg.message;
+
+    // 귓속말 여부 확인
+    if (message.startsWith("@")) {
+      // 귓속말 대상과 내용 분리
+      const spaceIndex = message.indexOf(" ");
+      if (spaceIndex !== -1) {
+        const to = message.substring(1, spaceIndex); // 귓속말 대상
+        message = message.substring(spaceIndex + 1); // 귓속말 내용
+
+        // 귓속말 대상 찾기
+        const receiverId = Object.keys(users).find(
+          (id) => users[id].username === to
+        );
+        if (receiverId) {
+          // 귓속말 대상에게 메시지 전송
+          io.to(receiverId).emit("chat message", {
+            message: `[귓속말] ${sender}: ${message}`,
+            from: "귓속말",
+          });
+          // 귓속말 발신자에게도 메시지 전송
+          io.to(socket.id).emit("chat message", {
+            message: `[귓속말] 나 -> ${to}: ${message}`,
+            from: "귓속말",
+          });
+          return; // 귓속말 처리 후 함수 종료
+        } else {
+          message = `[귓속말 실패] 대화 상대를 찾을 수 없습니다.`;
+        }
+      } else {
+        message = `[귓속말 실패] 귓속말 대상과 메시지를 입력해주세요.`;
+      }
+    }
     // 전체 채팅 메시지 전송
     io.emit("chat message", { message: message, from: sender });
     io.emit("scroll to bottom");
-    // 귓속말 처리
-    if (msg.to) {
-      const receiverId = Object.keys(users).find(
-        (id) => users[id].username === msg.to
-      );
-      if (receiverId) {
-        io.to(receiverId).emit("chat message", {
-          message: `[귓속말] ${sender}: ${message}`,
-          from: "귓속말",
+
+    // 챗봇 응답 처리
+    if (!users[socket.id].isAnonymous) {
+      const triggerPhrases = [
+        "!명령어",
+        "안녕",
+        "반가워",
+        "좋은하루",
+        "날씨",
+        "잘가",
+      ];
+      const botResponses = [
+        "사용가능한 명령어로는 '안녕, 반가워, 좋은하루, 날씨, 잘가'가 있습니다.",
+        "안녕하세요!",
+        "만나서 반가워요!",
+        "네, 좋은 하루 되세요!",
+        "오늘은 맑네요. 축구 한판 어떠신가요??!!",
+        "안녕히 가세요!",
+      ];
+
+      // 사용자가 보낸 메시지가 챗봇의 트리거 문구와 일치하는지 확인
+      const userMessage = msg.message;
+      const triggerIndex = triggerPhrases.indexOf(userMessage);
+
+      if (triggerIndex !== -1) {
+        const botResponse = botResponses[triggerIndex];
+        io.emit("chat message", {
+          message: ` ${botResponse}`,
+          from: "Chatbot",
         });
-        message = `[귓속말] ${message}`;
-      } else {
-        message = `[귓속말 실패] 대화 상대를 찾을 수 없습니다.`;
-      }
-    } else {
-      message = `${sender}: ${message}`;
-
-      // 챗봇 응답 처리
-      if (!users[socket.id].isAnonymous) {
-        const triggerPhrases = [
-          "!명령어",
-          "안녕",
-          "반가워",
-          "좋은하루",
-          "날씨",
-          "잘가",
-        ];
-        const botResponses = [
-          "사용가능한 명령어로는 '안녕, 반가워, 좋은하루, 날씨, 잘가'가 있습니다.",
-          "안녕하세요!",
-          "만나서 반가워요!",
-          "네, 좋은 하루 되세요!",
-          "오늘은 맑네요. 축구 한판 어떠신가요??!!",
-          "안녕히 가세요!",
-        ];
-
-        // 사용자가 보낸 메시지가 챗봇의 트리거 문구와 일치하는지 확인
-        const userMessage = msg.message;
-        const triggerIndex = triggerPhrases.indexOf(userMessage);
-
-        if (triggerIndex !== -1) {
-          const botResponse = botResponses[triggerIndex];
-          io.emit("chat message", {
-            message: ` ${botResponse}`,
-            from: "Chatbot",
-          });
-        }
       }
     }
   });
