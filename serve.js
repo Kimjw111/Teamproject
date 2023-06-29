@@ -31,6 +31,9 @@ io.on("connection", (socket) => {
     // 사용자가 나갈 때마다 사용자 수 업데이트
     userCount--;
     io.emit("user count", userCount);
+
+    const userList = Object.values(users).map((user) => user.username);
+    io.emit("user list", userList);
   });
 
   // 로그인 이벤트 처리
@@ -47,6 +50,9 @@ io.on("connection", (socket) => {
     // 입장 메시지를 전체에게 전송
     const message = `${users[socket.id].username}님이 입장하셨습니다.`;
     io.emit("chat message", { message: message, from: "서버" });
+
+    const userList = Object.values(users).map((user) => user.username);
+    io.emit("user list", userList);
   });
 
   // 채팅 메시지 이벤트 처리

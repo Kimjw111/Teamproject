@@ -40,6 +40,9 @@
         <div id="chat">
           <ul id="messages"></ul>
         </div>
+        <div id="user">
+          <ul id="user-list"></ul>
+        </div>
         <form id="message-form">
           <input id="input" autocomplete="off" />
           <button id="send_btn">전송</button>
@@ -115,7 +118,9 @@
             time.style.marginTop = "10px";
             nickname.style.fontSize = "0.8rem";
             nickname.textContent = `★ ${msg.from} ★`;
+            nickname.className = "chatmsg";
             item.textContent = ` ${msg.message}`;
+            item.className = "chatmsg";
             chat.append(messages, br);
             messages.append(nickname, item);
             item.appendChild(time);
@@ -134,6 +139,29 @@
         socket.on("user count", (count) => {
           const userCountElement = document.getElementById("user-count");
           userCountElement.textContent = count;
+        });
+
+        socket.on("user list", (userList) => {
+          const user = document.getElementById("user-list");
+          user.innerHTML = ""; // 기존 리스트 초기화
+
+          // 사용자 이름 리스트를 순회하며 각 사용자 이름을 리스트로 추가
+          userList.forEach((username) => {
+            const listItem = document.createElement("li");
+            listItem.textContent = username;
+            user.appendChild(listItem);
+          });
+        });
+        const clickUser = document.getElementById("person");
+        const showUser = document.getElementById("user");
+        clickUser.addEventListener("click", () => {
+          showUser.style.right = "100px";
+          showUser.style.transition = "0.3s ease-in";
+          const hideUser = document.getElementById("chat");
+          hideUser.addEventListener("click", () => {
+            showUser.style.right = "-100px";
+            showUser.style.transition = "0.3s ease-in";
+          });
         });
       }, 3000);
     </script>
